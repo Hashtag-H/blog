@@ -1,0 +1,56 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: ai-knowledge-blog
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${POSTGRES_DB:ai_knowledge_blog}
+    username: ${POSTGRES_USER:blog}
+    password: ${POSTGRES_PASSWORD:change-me}
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3s
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 200MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+knife4j:
+  enable: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:replace-with-at-least-32-random-characters}
+    access-token-minutes: ${JWT_ACCESS_TOKEN_MINUTES:30}
+    refresh-token-days: ${JWT_REFRESH_TOKEN_DAYS:14}
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:admin123456}
+    token: ${ADMIN_TOKEN:dev-admin-token-change-me}
+  ai:
+    base-url: ${AI_BASE_URL:}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:}
+  search:
+    provider: ${SEARCH_PROVIDER:mock}
+    api-base-url: ${SEARCH_API_BASE_URL:}
+    api-key: ${SEARCH_API_KEY:}
+  upload:
+    storage-dir: ${UPLOAD_STORAGE_DIR:storage/uploads}

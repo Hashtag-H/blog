@@ -1,0 +1,161 @@
+{
+  "mouseover": [
+    {
+      "selector": "#live2d",
+      "text": [
+        "我在右下角待命。想读文章、找灵感、看分类，都可以叫我。",
+        "今天想看技术笔记，还是去麦田里吹吹风？",
+        "我会根据你停留的内容给一点小提示。"
+      ]
+    },
+    {
+      "selector": ".brand-link",
+      "text": ["点这里可以回到首页。", "回到河南娃的小窝，重新从第一缕麦香开始。"]
+    },
+    {
+      "selector": ".nav-link",
+      "text": ["这个入口会带你去新的页面。", "慢慢逛，文章、分类、生活碎片都在路边。"]
+    },
+    {
+      "selector": ".post-card, .archive-row, .search-result-card, .taxonomy-posts a",
+      "text": [
+        "这篇看起来不错，要打开读读吗？",
+        "这条内容也许正好对你有用。",
+        "标题里藏着线索，点进去看看它到底想说什么。"
+      ]
+    },
+    {
+      "selector": ".sidebar-profile-card, .about-hero",
+      "text": ["这里是站点主人的信息。", "头像、公告和背景都可以在后台设置里更换。"]
+    },
+    {
+      "selector": ".public-search-input",
+      "text": ["输入关键词就能搜索文章。", "可以试试搜索：深度学习、PyTorch、名言、项目。"]
+    },
+    {
+      "selector": ".article-content, .reading-prose",
+      "text": ["正在阅读正文。遇到重点可以先慢一点。", "这段内容值得消化，不用急着翻过去。"]
+    },
+    {
+      "selector": ".article-tag-row span, .tag-cloud a, .post-card-tags span",
+      "text": ["标签可以帮你串起同类文章。", "顺着这个标签走，也许会发现一串相关内容。"]
+    },
+    {
+      "selector": ".category-row, .taxonomy-card, .article-category-badge, .post-card-category",
+      "text": ["分类是小站的地图。", "从分类进入，会比漫无目的翻找更快。"]
+    },
+    {
+      "selector": ".admin-primary-button, .admin-primary-link",
+      "text": ["这是关键操作，点之前我会帮你盯着反馈。", "执行后右上角会出现成功或失败提示。"]
+    },
+    {
+      "selector": ".markdown-preview",
+      "text": ["这里是文章预览区。边写边看，版面会更稳。", "如果预览和想象不一样，可以回到 Markdown 调一调。"]
+    },
+    {
+      "selector": "#waifu-tool-hitokoto",
+      "text": ["想听一句随机句子吗？", "点一下，我给你找一句能提神的话。"]
+    },
+    {
+      "selector": "#waifu-tool-express",
+      "text": ["要换个表情看看吗？", "表情切换准备好了。"]
+    },
+    {
+      "selector": "#waifu-tool-switch-model",
+      "text": ["这里可以切换形象。", "如果配置了多个模型，就能在这里切换。"]
+    },
+    {
+      "selector": "#waifu-tool-switch-texture",
+      "text": ["这里可以切换同一形象的不同材质。", "如果模型有多个皮肤，就能在这里切换。"]
+    },
+    {
+      "selector": "#waifu-tool-quit",
+      "text": ["要暂时隐藏我吗？", "隐藏后左侧会出现召回按钮。"]
+    }
+  ],
+  "click": [
+    {
+      "selector": "#live2d",
+      "text": [
+        "我在呢。你点我，我就当你是在确认我有没有认真上班。",
+        "收到点击。今天的计划是读一篇、写一点、再奖励自己休息一下。",
+        "别看我站在右下角，我其实一直在观察页面上下文。",
+        "要是文章太长，可以先看标题、摘要和标签，再决定要不要深读。",
+        "我会尽量少废话，但关键时候会提醒你。",
+        "麦田风很轻，代码也可以写得很稳。"
+      ]
+    },
+    {
+      "selector": ".article-title, .post-card-title, .archive-row strong",
+      "text": ["准备打开这篇文章。", "希望这篇能给你一点启发。", "点进去之后，我会按文章内容换一句更贴近的话。"]
+    },
+    {
+      "selector": ".admin-danger-button",
+      "text": ["这是删除类操作，确认后再点。", "删东西要慢半拍，确认没问题再执行。"]
+    },
+    {
+      "selector": ".preview-edit-toggle",
+      "text": ["预览区也能直接改，但复杂排版还是建议回 Markdown。", "改完预览区记得让内容同步回去。"]
+    }
+  ],
+  "seasons": [
+    {
+      "date": "01/01",
+      "text": "新的一年开始了，愿你保持好奇。"
+    },
+    {
+      "date": "06/01",
+      "text": "今天也适合保留一点童心。"
+    },
+    {
+      "date": "10/01",
+      "text": "假期快乐，记得休息。"
+    },
+    {
+      "date": "12/20-12/31",
+      "text": "年末到了，适合整理这一年的收获。"
+    }
+  ],
+  "time": [
+    {
+      "hour": "6-8",
+      "text": "早上好，适合开始一篇清爽的阅读。"
+    },
+    {
+      "hour": "9-11",
+      "text": "上午好，今天的学习计划开始了吗？"
+    },
+    {
+      "hour": "12-13",
+      "text": "中午了，记得吃饭和休息。"
+    },
+    {
+      "hour": "14-17",
+      "text": "下午好，适合处理一点需要专注的内容。"
+    },
+    {
+      "hour": "18-21",
+      "text": "晚上好，慢慢看文章也不错。"
+    },
+    {
+      "hour": "22-23",
+      "text": "夜深了，注意休息。"
+    },
+    {
+      "hour": "0-5",
+      "text": "已经很晚了，别把今天拉得太长。"
+    }
+  ],
+  "message": {
+    "default": [
+      "我在这里陪你读文章。",
+      "有什么内容想找，可以试试搜索。",
+      "后台可以管理文章、分类和站点设置。",
+      "今天的页面状态不错，适合继续完善一点细节。",
+      "如果不知道先看哪篇，可以从置顶文章开始。"
+    ],
+    "console": "你打开了控制台，看来要认真调试了。",
+    "copy": "复制成功，引用内容时记得保留出处。",
+    "visibilitychange": "欢迎回来。"
+  }
+}

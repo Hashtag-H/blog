@@ -1,0 +1,9 @@
+node_modules
+.nuxt
+.output
+.vite-cache
+npm-debug.log*
+Dockerfile
+.git
+.gitignore
+
