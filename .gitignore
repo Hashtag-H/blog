@@ -1,0 +1,22 @@
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+_multiconfig.yml
+
+# Local Baota deploy artifacts and secrets
+.baota-staging/
+.baota-deploy.json
+.baota-manifest.json
+.baota-ssh-key
+.baota-ssh-key.pub
+baota-upload.zip
+baota-upload.tar.gz
+
+# Local editor/runtime cache
+.pnpm-store/
+.vscode/
+.idea/

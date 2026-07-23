@@ -1,0 +1,24 @@
+{
+  "base": {
+    "cdnPath": "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api@1.0.1/",
+    "homePath": "/"
+  },
+  "runtime": {
+    "type": "classic",
+    "widgetPath": "https://fastly.jsdelivr.net/npm/live2d-widgets@0/"
+  },
+  "model": {
+    "defaultModelId": 0,
+    "defaultTextureId": 0
+  },
+  "tools": ["hitokoto", "switch-model", "switch-texture", "photo", "info", "quit"],
+  "drag": {
+    "enable": false,
+    "direction": ["x", "y"]
+  },
+  "switchType": "order",
+  "chat": {
+    "enable": false,
+    "apiUrl": ""
+  }
+}
