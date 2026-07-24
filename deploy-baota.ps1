@@ -5,10 +5,14 @@ $ConfigPath = Join-Path $ProjectRoot '.baota-deploy.json'
 $ManifestPath = Join-Path $ProjectRoot '.baota-manifest.json'
 $ArchivePath = Join-Path $ProjectRoot 'baota-upload.tar.gz'
 $StagingDir = Join-Path $ProjectRoot '.baota-staging'
+$DeployTempDir = Join-Path $env:TEMP "blog-baota-deploy-$PID"
+$PortableArchivePath = Join-Path $DeployTempDir 'baota-upload.tar.gz'
+$PortableSshKeyPath = Join-Path $DeployTempDir 'baota-ssh-key'
 $RemoteArchive = '/tmp/henan-blog-upload.tar.gz'
 $PublicDir = Join-Path $ProjectRoot 'public'
 $DeleteListName = '.deploy-delete-list.txt'
 $SshKeyPath = Join-Path $ProjectRoot '.baota-ssh-key'
+$script:OpenSshKeyPath = $SshKeyPath
 
 function Write-Title($Text) {
   Write-Host ''
@@ -123,6 +127,55 @@ function Invoke-Checked($File, [string[]]$ArgsList) {
   & $File @ArgsList
   if ($LASTEXITCODE -ne 0) {
     throw "$File failed with exit code $LASTEXITCODE"
+  }
+}
+
+function Test-Ssh-Banner($Config) {
+  try {
+    $client = New-Object System.Net.Sockets.TcpClient
+    $client.ReceiveTimeout = 5000
+    $client.Connect($Config.host, [int]$Config.port)
+    $stream = $client.GetStream()
+    $buffer = New-Object byte[] 128
+    $count = $stream.Read($buffer, 0, $buffer.Length)
+    $client.Close()
+
+    if ($count -le 0) {
+      Write-Host 'SSH port is reachable, but the server closed the connection before sending an SSH banner.' -ForegroundColor Yellow
+      Write-Host 'This usually means sshd/security group/Baota anti-bruteforce/server blacklist is blocking this client.' -ForegroundColor Yellow
+    }
+  } catch {
+    Write-Host "SSH preflight failed: $($_.Exception.Message)" -ForegroundColor Yellow
+  }
+}
+
+function Protect-PrivateKey($Path) {
+  if (-not (Test-Path -LiteralPath $Path)) {
+    return
+  }
+
+  $user = "$env:USERDOMAIN\$env:USERNAME"
+  & icacls.exe $Path '/inheritance:r' '/remove:g' 'BUILTIN\Administrators' 'NT AUTHORITY\SYSTEM' 'DESKTOP-BRFHVH3\CodexSandboxUsers' '/grant:r' "$user`:R" | Out-Null
+}
+
+function Prepare-OpenSsh-PortableFiles {
+  if (-not (Test-Path -LiteralPath $DeployTempDir)) {
+    New-Item -ItemType Directory -Force -Path $DeployTempDir | Out-Null
+  }
+
+  Copy-Item -LiteralPath $ArchivePath -Destination $PortableArchivePath -Force
+
+  if (Test-Path -LiteralPath $SshKeyPath) {
+    Copy-Item -LiteralPath $SshKeyPath -Destination $PortableSshKeyPath -Force
+    Protect-PrivateKey $PortableSshKeyPath
+    $script:OpenSshKeyPath = $PortableSshKeyPath
+  } else {
+    $script:OpenSshKeyPath = $SshKeyPath
+  }
+
+  return [pscustomobject]@{
+    archive = $PortableArchivePath
+    key = $script:OpenSshKeyPath
   }
 }
 
@@ -254,12 +307,14 @@ function Pack-Directory($Directory) {
 }
 
 function Upload-Archive($Config) {
+  $portable = Prepare-OpenSsh-PortableFiles
+  Test-Ssh-Banner $Config
   $remote = "$($Config.user)@$($Config.host)"
   $args = @('-P', "$($Config.port)")
-  if (Test-Path -LiteralPath $SshKeyPath) {
-    $args += @('-i', $SshKeyPath, '-o', 'IdentitiesOnly=yes')
+  if (Test-Path -LiteralPath $portable.key) {
+    $args += @('-i', $portable.key, '-o', 'IdentitiesOnly=yes')
   }
-  $args += @($ArchivePath, "${remote}:$RemoteArchive")
+  $args += @($portable.archive, "${remote}:$RemoteArchive")
   Invoke-Checked 'scp.exe' $args
   return $remote
 }
@@ -275,8 +330,8 @@ echo Full deploy finished: '$($Config.siteRoot)'
 "@
 
   $args = @('-p', "$($Config.port)")
-  if (Test-Path -LiteralPath $SshKeyPath) {
-    $args += @('-i', $SshKeyPath, '-o', 'IdentitiesOnly=yes')
+  if (Test-Path -LiteralPath $script:OpenSshKeyPath) {
+    $args += @('-i', $script:OpenSshKeyPath, '-o', 'IdentitiesOnly=yes')
   }
   $args += @($Remote, $remoteCommand)
   Invoke-Checked 'ssh.exe' $args
@@ -304,8 +359,8 @@ echo Incremental deploy finished: "`$SITE"
 "@
 
   $args = @('-p', "$($Config.port)")
-  if (Test-Path -LiteralPath $SshKeyPath) {
-    $args += @('-i', $SshKeyPath, '-o', 'IdentitiesOnly=yes')
+  if (Test-Path -LiteralPath $script:OpenSshKeyPath) {
+    $args += @('-i', $script:OpenSshKeyPath, '-o', 'IdentitiesOnly=yes')
   }
   $args += @($Remote, $remoteCommand)
   Invoke-Checked 'ssh.exe' $args

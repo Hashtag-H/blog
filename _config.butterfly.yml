@@ -1071,9 +1071,9 @@ css_prefix: true
 inject:
   head:
     - <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    - <link rel="stylesheet" href="/css/henan-wa.css?v=life-log-20260722-11">
+    - <link rel="stylesheet" href="/css/henan-wa.css?v=life-log-20260724-no-post-hero">
   bottom:
-    - <script src="/js/henan-wa.js?v=life-log-20260722-11"></script>
+    - <script src="/js/henan-wa.js?v=life-log-20260724-no-post-hero"></script>
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work
