@@ -1,7 +1,9 @@
 param(
   [string]$RemoteUrl = 'https://github.com/Hashtag-H/blog.git',
   [string]$Branch = 'main',
-  [string]$Message = ''
+  [string]$Message = '',
+  [switch]$DryRun,
+  [switch]$WhatIf
 )
 
 $ErrorActionPreference = 'Stop'
@@ -20,7 +22,9 @@ function Invoke-Git([string[]]$Arguments, [switch]$AllowFailure) {
   if ($code -ne 0 -and -not $AllowFailure) {
     throw "git $($Arguments -join ' ') failed with exit code $code"
   }
-  return $code
+  if ($AllowFailure) {
+    return $code
+  }
 }
 
 function Test-GitOk([string[]]$Arguments) {
@@ -74,11 +78,22 @@ $changes = (& git status --porcelain)
 if ([string]::IsNullOrWhiteSpace(($changes -join "`n"))) {
   Write-Host 'No local changes to commit.'
 } else {
+  if ($DryRun -or $WhatIf) {
+    Write-Host 'Dry run only. These changes would be committed:'
+    & git status --short
+    return
+  }
+
   if ([string]::IsNullOrWhiteSpace($Message)) {
     $Message = 'chore: sync blog ' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
   }
   Write-Host "Committing changes: $Message"
   Invoke-Git @('commit', '-m', $Message)
+}
+
+if ($DryRun -or $WhatIf) {
+  Write-Host 'Dry run only. Push skipped.'
+  return
 }
 
 Write-Host 'Pushing to GitHub...'
