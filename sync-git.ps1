@@ -32,6 +32,24 @@ function Test-GitOk([string[]]$Arguments) {
   return $LASTEXITCODE -eq 0
 }
 
+function Invoke-GitWithRetry([string[]]$Arguments, [int]$Retries = 3, [int]$DelaySeconds = 5) {
+  for ($attempt = 1; $attempt -le $Retries; $attempt++) {
+    Write-Host "Attempt $attempt/$Retries`: git $($Arguments -join ' ')"
+    & git @Arguments
+    $code = $LASTEXITCODE
+    if ($code -eq 0) {
+      return
+    }
+
+    if ($attempt -lt $Retries) {
+      Write-Host "Command failed with exit code $code. Retrying in $DelaySeconds seconds..."
+      Start-Sleep -Seconds $DelaySeconds
+    }
+  }
+
+  throw "git $($Arguments -join ' ') failed after $Retries attempts"
+}
+
 Write-Title 'Git Sync'
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
@@ -63,6 +81,8 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($origin)) {
 
 Write-Host "Remote: $RemoteUrl"
 Write-Host "Branch: $Branch"
+
+Invoke-Git @('config', '--local', 'http.version', 'HTTP/1.1')
 
 $hasHead = Test-GitOk @('rev-parse', '--verify', 'HEAD')
 $remoteBranchExists = Test-GitOk @('ls-remote', '--exit-code', '--heads', 'origin', $Branch)
@@ -97,6 +117,6 @@ if ($DryRun -or $WhatIf) {
 }
 
 Write-Host 'Pushing to GitHub...'
-Invoke-Git @('push', '-u', 'origin', $Branch)
+Invoke-GitWithRetry @('push', '-u', 'origin', $Branch)
 
 Write-Host 'Git sync finished.'
